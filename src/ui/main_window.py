@@ -1,8 +1,10 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel
 
 from src.ui.widgets.list_view import ListView
+from src.utilities.qfile_dialog import get_file_path
 
 
+# noinspection PyUnresolvedReferences
 class MainWindow(QMainWindow):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -21,6 +23,7 @@ class MainWindow(QMainWindow):
         file_count_layout.addWidget(self.file_count_label)
         file_buttons_layout = QHBoxLayout()
         add_file_button = QPushButton("Add file")
+        add_file_button.clicked.connect(self.add_new_file)
         delete_file_button = QPushButton("Delete file")
         delete_all_files = QPushButton("Delete all files")
         count_layout = QHBoxLayout()
@@ -37,3 +40,6 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(count_layout)
         central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
+
+    def add_new_file(self) -> None:
+        get_file_path(self)
