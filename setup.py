@@ -9,7 +9,7 @@ setup(
     version="1.0",
     author="Jin-Mach",
     author_email="Ji82Ma@seznam.cz",
-    description="A simple application to count lines of code in selected files or directories.",
+    description="A simple ui to count lines of code in selected files or directories.",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     url="https://github.com/Jin-Mach/CodeLineCounter",
