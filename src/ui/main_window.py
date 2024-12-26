@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPus
 from src.ui.widgets.list_view import ListView
 from src.utilities.excenption_handler import ExceptionHandler
 from src.utilities.dialog_manager import DialogManager
+from src.utilities.line_counter import line_counter
 from src.utilities.string_list_model import StringListModel
 
 
@@ -33,6 +34,7 @@ class MainWindow(QMainWindow):
         delete_all_files.clicked.connect(self.delete_all_files)
         count_layout = QHBoxLayout()
         count_button = QPushButton("Start")
+        count_button.clicked.connect(self.start_count)
         count_layout.addStretch()
         count_layout.addWidget(count_button)
         count_layout.addStretch()
@@ -68,8 +70,16 @@ class MainWindow(QMainWindow):
 
     def delete_all_files(self) -> None:
         try:
-            if DialogManager.delete_files_dialog(self):
-                self.string_model.clear_model()
-                self.file_count_label.setText(f"files: {self.string_model.rowCount()}")
+            if self.string_model.rowCount() > 0:
+                if DialogManager.delete_files_dialog(self):
+                    self.string_model.clear_model()
+                    self.file_count_label.setText(f"files: {self.string_model.rowCount()}")
+        except Exception as e:
+            ExceptionHandler.exception_handler(e)
+
+    def start_count(self) -> None:
+        try:
+            if self.string_model.rowCount() > 0:
+                DialogManager.show_row_count_dialog(line_counter(self.string_model), self)
         except Exception as e:
             ExceptionHandler.exception_handler(e)
