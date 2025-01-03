@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPus
 from src.ui.widgets.list_view import ListView
 from src.utilities.excenption_handler import ExceptionHandler
 from src.utilities.dialog_manager import DialogManager
+from src.utilities.file_controler import FileControler
 from src.utilities.line_counter import line_counter
 from src.utilities.string_list_model import StringListModel
 
@@ -12,9 +13,11 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setWindowTitle("Code line counter")
-        self.setFixedSize(500, 400)
+        self.setFixedSize(600, 400)
+        self.dialog_manager = DialogManager()
         self.string_model = StringListModel()
         self.list_view = ListView(self.string_model, self)
+        self.file_controler = FileControler()
         self.create_gui()
 
     def create_gui(self) -> None:
@@ -50,30 +53,22 @@ class MainWindow(QMainWindow):
 
     def add_new_file(self) -> None:
         try:
-            file = DialogManager.get_file_path_dialog(self)
-            if not self.string_model.file_exists_in_model(file):
-                self.string_model.new_file(file)
-                self.file_count_label.setText(f"files: {self.string_model.rowCount()}")
-            else:
-                DialogManager.existing_file_messagebox(file, self)
+            files = DialogManager.get_file_path_dialog(self)
+            if files:
+                self.file_controler.add_files(files, self.string_model, self.dialog_manager, self.file_count_label)
         except Exception as e:
             ExceptionHandler.exception_handler(e)
 
     def delete_file(self) -> None:
         try:
             index = self.list_view.currentIndex().row()
-            if index >= 0:
-                self.string_model.delete_file(index)
-                self.file_count_label.setText(f"files: {self.string_model.rowCount()}")
+            self.file_controler.delete_file(index, self.string_model, self.dialog_manager, self.file_count_label)
         except Exception as e:
             ExceptionHandler.exception_handler(e)
 
     def delete_all_files(self) -> None:
         try:
-            if self.string_model.rowCount() > 0:
-                if DialogManager.delete_files_dialog(self):
-                    self.string_model.clear_model()
-                    self.file_count_label.setText(f"files: {self.string_model.rowCount()}")
+            self.file_controler.delete_all_files(self.string_model, self.dialog_manager, self.file_count_label, self)
         except Exception as e:
             ExceptionHandler.exception_handler(e)
 
@@ -81,5 +76,7 @@ class MainWindow(QMainWindow):
         try:
             if self.string_model.rowCount() > 0:
                 DialogManager.show_row_count_dialog(line_counter(self.string_model), self)
+            else:
+                DialogManager.show_no_files_messagebox()
         except Exception as e:
             ExceptionHandler.exception_handler(e)
