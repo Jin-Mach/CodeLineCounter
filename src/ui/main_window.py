@@ -4,7 +4,7 @@ from src.ui.widgets.list_view import ListView
 from src.utilities.excenption_handler import ExceptionHandler
 from src.utilities.dialog_manager import DialogManager
 from src.utilities.file_controler import FileControler
-from src.utilities.line_counter import line_counter
+from src.utilities.line_counter import Counter
 from src.utilities.string_list_model import StringListModel
 
 
@@ -75,8 +75,13 @@ class MainWindow(QMainWindow):
     def start_count(self) -> None:
         try:
             if self.string_model.rowCount() > 0:
-                DialogManager.show_row_count_dialog(line_counter(self.string_model), self)
+                counter = Counter()
+                counter.count_signal.connect(self.show_lines_count)
+                counter.line_counter(self.string_model)
             else:
                 DialogManager.show_no_files_messagebox()
         except Exception as e:
             ExceptionHandler.exception_handler(e)
+
+    def show_lines_count(self, lines: int) -> None:
+        DialogManager.show_row_count_dialog(lines, self)

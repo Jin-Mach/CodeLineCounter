@@ -1,7 +1,7 @@
 # CodeLineCounter
 
-**CodeLineCounter** is a simple application designed to count lines of code in selected files or directories.
-With an intuitive interface and straightforward functionality, it helps developers quickly assess the size of their projects and analyze code across multiple formats.
+**CodeLineCounter** is a simple application designed to count lines of code in selected Python files (.py).
+With an intuitive interface and straightforward functionality, it helps developers quickly assess the size of their Python projects and analyze code across multiple .py files.
 
 ## Features
 
