@@ -8,9 +8,9 @@ class Counter(QObject):
     count_signal = pyqtSignal(int)
 
     @staticmethod
-    def count_lines_in_file(file_path: str) -> int:
+    def count_lines_in_file(file_path: str) -> int | None:
         try:
-            in_coment = False
+            in_comment = False
             lines = 0
             with open(file_path, "r", encoding="utf-8") as file:
                 for line in file:
@@ -19,22 +19,23 @@ class Counter(QObject):
                         continue
                     if stripped_line.startswith(("'''", '"""')) and stripped_line.endswith(("'''", '"""')):
                         continue
-                    if not in_coment and (stripped_line.startswith("'''") or stripped_line.startswith('"""')):
+                    if not in_comment and (stripped_line.startswith("'''") or stripped_line.startswith('"""')):
                         if stripped_line.endswith("'''") or stripped_line.endswith('"""'):
                             if len(stripped_line) > 3:
                                 continue
                         else:
-                            in_coment = True
+                            in_comment = True
                         continue
-                    if in_coment and (stripped_line.endswith("'''") or stripped_line.endswith('"""')):
-                        in_coment = False
+                    if in_comment and (stripped_line.endswith("'''") or stripped_line.endswith('"""')):
+                        in_comment = False
                         continue
-                    if in_coment:
+                    if in_comment:
                         continue
                     lines += 1
             return lines
         except Exception as e:
             ExceptionHandler.exception_handler(e)
+            return None
 
     def line_counter(self, model: QStringListModel) -> None:
         try:

@@ -4,7 +4,7 @@ from src.utilities.dialog_manager import DialogManager
 from src.utilities.string_list_model import StringListModel
 
 
-class FileControler:
+class FileController:
 
     @staticmethod
     def add_files(files: list[str], model: StringListModel, dialog: DialogManager, text_label: QLabel) -> None:

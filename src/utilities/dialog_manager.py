@@ -9,11 +9,12 @@ from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLabel, QDialog, QVBoxLayo
 class DialogManager:
 
     @staticmethod
-    def get_file_path_dialog(parent=None) -> list:
+    def get_file_path_dialog(parent=None) -> list | None:
         dialog_path = pathlib.Path(__file__).parts[0]
         file_paths, _ = QFileDialog.getOpenFileNames(parent, "", dialog_path, "Python Files (*.py)")
         if file_paths:
             return file_paths
+        return None
 
     @staticmethod
     def show_delete_file_messagebox(parent=None) -> None:
