@@ -50,8 +50,14 @@ With an intuitive interface and straightforward functionality, it helps develope
 
 ## Usage
 To run the application, execute the following command:
-    ```
+
+- On Windows
+    ```bash
     python CodeLineCounter.py
+    ```
+- On macOS/Linux
+    ```bash
+    python3 CodeLineCounter.py
     ```
 
 ## License
